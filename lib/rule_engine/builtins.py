@@ -37,6 +37,7 @@ import decimal
 import functools
 import math
 import random
+import textdistance
 
 from ._utils import parse_datetime, parse_float, parse_timedelta
 from . import ast
@@ -53,6 +54,9 @@ def _builtin_map(function, iterable):
 
 def _builtin_parse_datetime(builtins, string):
 	return parse_datetime(string, builtins.timezone)
+
+def _similarity_jaro_winkler(str_1, str_2):
+    return float("%.2f" % textdistance.jaro_winkler(str_1, str_2)) * 100
 
 def _builtin_random(boundary=None):
 	if boundary:
@@ -165,7 +169,8 @@ class Builtins(collections.abc.Mapping):
 			'parse_float': parse_float,
 			'parse_timedelta': parse_timedelta,
 			'random': _builtin_random,
-			'split': _builtins_split
+			'split': _builtins_split,
+			'similarity_jao_winkler': _similarity_jaro_winkler
 		}
 		default_values.update(values or {})
 		default_value_types = {
@@ -193,6 +198,12 @@ class Builtins(collections.abc.Mapping):
 				return_type=ast.DataType.ARRAY(ast.DataType.STRING),
 				argument_types=(ast.DataType.STRING, ast.DataType.STRING, ast.DataType.FLOAT),
 				minimum_arguments=1
+			),
+			'similarity_jao_winkler': ast.DataType.FUNCTION(
+				'similarity_jao_winkler',
+				return_type=ast.DataType.FLOAT,
+				argument_types=(ast.DataType.STRING, ast.DataType.STRING),
+				minimum_arguments=2
 			)
 		}
 		default_value_types.update(kwargs.pop('value_types', {}))
