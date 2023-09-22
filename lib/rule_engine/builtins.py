@@ -174,7 +174,7 @@ class Builtins(collections.abc.Mapping):
 			'parse_timedelta': parse_timedelta,
 			'random': _builtin_random,
 			'split': _builtins_split,
-			'similarity_jao_winkler': _similarity_jaro
+			'similarity_jaro_winkler': _similarity_jaro
 		}
 		default_values.update(values or {})
 		default_value_types = {
@@ -203,8 +203,8 @@ class Builtins(collections.abc.Mapping):
 				argument_types=(ast.DataType.STRING, ast.DataType.STRING, ast.DataType.FLOAT),
 				minimum_arguments=1
 			),
-			'similarity_jao_winkler': ast.DataType.FUNCTION(
-				'similarity_jao_winkler',
+			'similarity_jaro_winkler': ast.DataType.FUNCTION(
+				'similarity_jaro_winkler',
 				return_type=ast.DataType.FLOAT,
 				argument_types=(ast.DataType.ARRAY(ast.DataType.STRING), ast.DataType.ARRAY(ast.DataType.STRING)),
 				minimum_arguments=2
