@@ -55,8 +55,12 @@ def _builtin_map(function, iterable):
 def _builtin_parse_datetime(builtins, string):
 	return parse_datetime(string, builtins.timezone)
 
-def _similarity_jaro_winkler(str_1, str_2):
-    return float("%.2f" % textdistance.jaro_winkler(str_1, str_2)) * 100
+def _similarity_jaro(str_1, str_2):
+    similarity_scores = list()
+    for a in str_1:
+        for b in str_2:
+            similarity_scores.append(float("%.2f" % textdistance.jaro_winkler(a, b)) * 100)
+    return max(similarity_scores)
 
 def _builtin_random(boundary=None):
 	if boundary:
@@ -170,7 +174,7 @@ class Builtins(collections.abc.Mapping):
 			'parse_timedelta': parse_timedelta,
 			'random': _builtin_random,
 			'split': _builtins_split,
-			'similarity_jao_winkler': _similarity_jaro_winkler
+			'similarity_jao_winkler': _similarity_jaro
 		}
 		default_values.update(values or {})
 		default_value_types = {
@@ -202,7 +206,7 @@ class Builtins(collections.abc.Mapping):
 			'similarity_jao_winkler': ast.DataType.FUNCTION(
 				'similarity_jao_winkler',
 				return_type=ast.DataType.FLOAT,
-				argument_types=(ast.DataType.STRING, ast.DataType.STRING),
+				argument_types=(ast.DataType.ARRAY(ast.DataType.STRING), ast.DataType.ARRAY(ast.DataType.STRING)),
 				minimum_arguments=2
 			)
 		}
