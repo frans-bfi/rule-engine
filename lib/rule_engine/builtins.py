@@ -56,9 +56,12 @@ def _builtin_parse_datetime(builtins, string):
 	return parse_datetime(string, builtins.timezone)
 
 def _similarity_jaro(str_1, str_2):
-    similarity_scores = list()
-    for a in str_1:
-        for b in str_2:
+    similarity_scores = list()    
+    str_1_arr = str_1.split("|")
+    str_2_arr = str_2.split("|")
+    
+    for a in str_1_arr:
+        for b in str_2_arr:
             similarity_scores.append(float("%.2f" % textdistance.jaro_winkler(a, b)) * 100)
     return max(similarity_scores)
 
@@ -206,7 +209,7 @@ class Builtins(collections.abc.Mapping):
 			'similarity_jaro_winkler': ast.DataType.FUNCTION(
 				'similarity_jaro_winkler',
 				return_type=ast.DataType.FLOAT,
-				argument_types=(ast.DataType.ARRAY(ast.DataType.STRING), ast.DataType.ARRAY(ast.DataType.STRING)),
+				argument_types=(ast.DataType.STRING, ast.DataType.STRING),
 				minimum_arguments=2
 			)
 		}
