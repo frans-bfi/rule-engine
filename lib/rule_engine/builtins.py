@@ -62,7 +62,7 @@ def _similarity_jaro(str_1, str_2):
     
     for a in str_1_arr:
         for b in str_2_arr:
-            similarity_scores.append(float("%.2f" % textdistance.jaro_winkler(a, b)) * 100)
+            similarity_scores.append(float("%.2f" % textdistance.jaro_winkler(a.lower(), b.lower())) * 100)
             
     return max(similarity_scores)
     
