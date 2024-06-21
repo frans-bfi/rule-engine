@@ -65,6 +65,12 @@ def _similarity_jaro(str_1, str_2):
             similarity_scores.append(float("%.2f" % textdistance.jaro_winkler(a.lower(), b.lower())) * 100)
             
     return max(similarity_scores)
+
+def _is_empty_str(text:str):
+    text = text.strip()
+    if text:
+        return len(text) == 0
+    return True
     
 
 def _builtin_random(boundary=None):
@@ -179,7 +185,8 @@ class Builtins(collections.abc.Mapping):
 			'parse_timedelta': parse_timedelta,
 			'random': _builtin_random,
 			'split': _builtins_split,
-			'similarity_jaro_winkler': _similarity_jaro
+			'similarity_jaro_winkler': _similarity_jaro,
+			'is_empty_str': _is_empty_str
 		}
 		default_values.update(values or {})
 		default_value_types = {
@@ -213,6 +220,12 @@ class Builtins(collections.abc.Mapping):
 				return_type=ast.DataType.FLOAT,
 				argument_types=(ast.DataType.UNDEFINED, ast.DataType.UNDEFINED),
 				minimum_arguments=2
+			),
+			'is_empty_str': ast.DataType.FUNCTION(
+				'is_empty_str',
+				return_type=ast.DataType.BOOLEAN,
+				argument_types=(ast.DataType.STRING,),
+				minimum_arguments=1
 			)
 		}
 		default_value_types.update(kwargs.pop('value_types', {}))
