@@ -233,7 +233,7 @@ class Builtins(collections.abc.Mapping):
 			'is_empty_str': ast.DataType.FUNCTION(
 				'is_empty_str',
 				return_type=ast.DataType.BOOLEAN,
-				argument_types=(ast.DataType.UNDEFINED),
+				argument_types=(ast.DataType.UNDEFINED,),
 				minimum_arguments=1
 			)
 		}
