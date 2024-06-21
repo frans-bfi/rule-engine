@@ -66,13 +66,15 @@ def _similarity_jaro(str_1, str_2):
             
     return max(similarity_scores)
 
-def _is_empty_str(text:str):
-    text = text.strip()
-    if text:
+def _is_empty_str(param):
+    if isinstance(param, tuple):
+        param = list(param)
+        return any(s.strip() == "" if s else True for s in param)
+    elif isinstance(param, str):
+        text = param.strip()
         return len(text) == 0
     return True
     
-
 def _builtin_random(boundary=None):
 	if boundary:
 		if not types.is_natural_number(boundary):
@@ -224,7 +226,7 @@ class Builtins(collections.abc.Mapping):
 			'is_empty_str': ast.DataType.FUNCTION(
 				'is_empty_str',
 				return_type=ast.DataType.BOOLEAN,
-				argument_types=(ast.DataType.STRING,),
+				argument_types=(ast.DataType.UNDEFINED,),
 				minimum_arguments=1
 			)
 		}
